@@ -16,12 +16,12 @@
   const PAGE_W = 1000; // every page is laid out 1000px wide; height follows the image ratio
 
   const PAGES = [
-    { n: 1, src: "assets/page1.jpg", thumb: "assets/thumb1.jpg", name: "Front Page" },
-    { n: 2, src: "assets/page2.jpg", thumb: "assets/thumb2.jpg", name: "Patents, Optics & Botany" },
-    { n: 3, src: "assets/page3.jpg", thumb: "assets/thumb3.jpg", name: "The Agony Column" },
-    { n: 4, src: "assets/page4.jpg", thumb: "assets/thumb4.jpg", name: "Culture & Theatres" },
-    { n: 5, src: "assets/page5.jpg", thumb: "assets/thumb5.jpg", name: "Maritime Intelligence" },
-    { n: 6, src: "assets/page6.jpg", thumb: "assets/thumb6.jpg", name: "The Kodak Camera" },
+    { n: 1, src: "page1.jpg", thumb: "thumb1.jpg", name: "Front Page" },
+    { n: 2, src: "page2.jpg", thumb: "thumb2.jpg", name: "Patents, Optics & Botany" },
+    { n: 3, src: "page3.jpg", thumb: "thumb3.jpg", name: "The Agony Column" },
+    { n: 4, src: "page4.jpg", thumb: "thumb4.jpg", name: "Culture & Theatres" },
+    { n: 5, src: "page5.jpg", thumb: "thumb5.jpg", name: "Maritime Intelligence" },
+    { n: 6, src: "page6.jpg", thumb: "thumb6.jpg", name: "The Kodak Camera" },
   ];
 
   // Blank instrument slots measured from the printed pages, in page px [x, y, w, h]
@@ -55,7 +55,7 @@
   const THAMES = [41, 210, 518, 347]; // page 5: "Thames After Dark" engraving
   const LAMP = [275, 395]; // page 5: the steamer's signal lamp, centre
   const DESPATCH = [585, 416, 391, 166]; // page 5: Private Telegraphic Despatches box
-  const POSTCARD_SRC = "assets/postcard.jpg"; // drop your own photograph here; falls back to the engraved scene
+  const POSTCARD_SRC = "postcard.jpg"; // drop your own photograph here; falls back to the engraved scene
 
   const ANSWERS = {
     steg: "SWEETPEA",
