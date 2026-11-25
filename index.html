@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>The Living Broadsheet — London, 1888</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cinzel+Decorative:wght@700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Special+Elite&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="phase-opening">
+
+  <!-- Desk: gaslamp fog & dust motes -->
+  <canvas id="gaslamp-canvas" aria-hidden="true"></canvas>
+  <div class="desk-vignette" aria-hidden="true"></div>
+
+  <!-- ======================= 3D WORLD (camera) ======================= -->
+  <div id="viewport">
+    <div id="world">
+
+      <!-- Opening: the folded, sealed Gazette (built from page 1's quarters) -->
+      <div id="fold-stage">
+        <div id="fold-rig" class="folded">
+          <div class="fq tl"><div class="face front"></div></div>
+          <div class="flap tr"><div class="face front"></div><div class="face back"></div></div>
+          <div class="flap bottom">
+            <div class="fq bl">
+              <div class="face front"></div>
+              <div class="face back">
+                <div class="post-label">
+                  <span class="pl-small">BY HAND · NOT TO BE OPENED IN THE STREET</span>
+                  <span class="pl-to">To the Finder,</span>
+                  <span class="pl-addr">care of the Agony Column,<br>Pall Mall Gazette, London</span>
+                  <span class="pl-from">— from the Moors —</span>
+                </div>
+              </div>
+            </div>
+            <div class="flap br"><div class="face front"></div><div class="face back"></div></div>
+          </div>
+          <div id="packet-dress">
+            <div class="twine twine-v"></div>
+            <div class="twine twine-h"></div>
+            <button id="wax-seal" aria-label="Break Lady Eudoria's wax seal to open the Gazette">
+              <span class="seal-half left"></span>
+              <span class="seal-half right"></span>
+              <span class="seal-mono">E</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- The reading surface: one page at a time, instruments in the blank slots -->
+      <div id="book" hidden>
+        <div id="page">
+          <img id="page-img" alt="" draggable="false">
+          <div class="crease" aria-hidden="true"></div>
+          <div id="hot-layer"></div>
+          <div id="slot-layer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Opening title card -->
+  <section id="title-card" aria-live="polite">
+    <p class="tc-kicker">An Investigative Lens · London, 1888</p>
+    <h1 class="tc-title">The Living Broadsheet</h1>
+    <p class="tc-sub">The Case of the Missing Marquess</p>
+    <p class="tc-prompt"><span class="pulse-dot"></span> Break the wax seal to open today's Gazette</p>
+    <p class="tc-note">Best with sound on · headphones recommended</p>
+  </section>
+
+  <!-- Dossier (briefing, field-instinct appraisal, result) -->
+  <section id="dossier" aria-label="Case briefing" hidden>
+    <div class="dossier-sheet" id="dossier-card"></div>
+  </section>
+
+  <!-- ============================ HUD ============================ -->
+  <header id="hud-top" class="hud">
+    <div class="hud-left">
+      <span class="lens-label">Field Lens</span>
+      <span id="stage-title">—</span>
+    </div>
+    <div class="hud-right">
+      <button class="hud-btn" id="btn-loupe" aria-pressed="false" title="Magnifying loupe (L)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg><span>Loupe</span>
+      </button>
+      <button class="hud-btn" id="btn-notes" aria-expanded="false" title="Field notes & casebook (N)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5z"/><path d="M15 4v4h4M8 12h8M8 16h6"/></svg><span>Notes</span>
+      </button>
+      <button class="hud-btn" id="btn-wire" title="Lady Eudoria's telegraph">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18M6 18V9l6-4 6 4v9M10 13h4"/></svg><span>Telegraph</span>
+      </button>
+      <button class="hud-btn" id="btn-sound" aria-expanded="false" title="Sound (M to mute)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path id="snd-wave" d="M16 8c2 2 2 6 0 8M18.5 5.5c3.5 3.5 3.5 9.5 0 13"/></svg><span>Sound</span>
+      </button>
+      <button class="hud-btn" id="btn-help" title="How to read the lens">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17.2v.1"/></svg><span>Guide</span>
+      </button>
+    </div>
+    <div id="sound-panel" hidden>
+      <p class="sp-title">The Phonograph</p>
+      <label>Music-box waltz <input type="range" min="0" max="1" step="0.01" id="vol-music"></label>
+      <label>London ambience <input type="range" min="0" max="1" step="0.01" id="vol-amb"></label>
+      <label>Instruments &amp; paper <input type="range" min="0" max="1" step="0.01" id="vol-sfx"></label>
+      <button class="brass-btn small" id="btn-mute">Mute all</button>
+    </div>
+  </header>
+
+  <nav id="hud-bottom" class="hud" aria-label="Gazette pages and case progress">
+    <div class="page-tabs" id="page-tabs"></div>
+    <div class="case-stepper">
+      <button class="nav-arrow" id="prev-stage" aria-label="Previous stage">&larr;</button>
+      <div class="pills" id="stage-pills"></div>
+      <button class="nav-arrow" id="next-stage" aria-label="Next stage">&rarr;</button>
+    </div>
+    <div class="zoom-ctl">
+      <button class="nav-arrow" id="zoom-out" aria-label="Zoom out">−</button>
+      <button class="nav-arrow wide" id="zoom-fit" aria-label="Fit page">Page</button>
+      <button class="nav-arrow wide" id="zoom-focus" aria-label="Focus on clue">Clue</button>
+      <button class="nav-arrow" id="zoom-in" aria-label="Zoom in">+</button>
+    </div>
+  </nav>
+
+  <!-- Field notes: Enola's casebook + a short lesson on each historical method -->
+  <aside id="notes" aria-label="Field notes" hidden>
+    <div class="notes-head">
+      <span class="notes-kicker" id="notes-kicker">Field Notes</span>
+      <button class="lens-close" id="notes-close" aria-label="Close field notes">&times;</button>
+    </div>
+    <div id="notes-body"></div>
+  </aside>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Mobile instrument drawer (docks move here on small screens) -->
+  <aside id="drawer" aria-label="Active instrument"></aside>
+
+  <!-- Magnifying loupe -->
+  <div id="loupe" aria-hidden="true"><div class="loupe-glass"></div><div class="loupe-reticle"></div></div>
+
+  <!-- Telegram slip (replaces browser alerts) -->
+  <div id="telegram-layer" hidden>
+    <div class="telegram" role="dialog" aria-modal="true" aria-labelledby="tg-title">
+      <div class="tg-head">
+        <span>POST OFFICE TELEGRAPHS</span>
+        <span id="tg-stamp">LONDON · 1888</span>
+      </div>
+      <h2 id="tg-title"></h2>
+      <div id="tg-body"></div>
+      <div class="tg-actions" id="tg-actions"></div>
+    </div>
+  </div>
+
+  <!-- Floating instrument (cipher disc / climax) -->
+  <div id="lens-layer" hidden>
+    <div class="lens-card" role="dialog" aria-modal="true">
+      <button class="lens-close" id="lens-close" aria-label="Close">&times;</button>
+      <div id="lens-content"></div>
+    </div>
+  </div>
+
+  <!-- Lady Eudoria's telegraph -->
+  <div id="wire-layer" hidden>
+    <div class="wire-chassis" role="dialog" aria-modal="true" aria-labelledby="wire-title">
+      <div class="wire-head">
+        <h2 id="wire-title">Lady Eudoria's Electric Telegraph</h2>
+        <button class="lens-close light" id="wire-close" aria-label="Close telegraph">&times;</button>
+      </div>
+      <div class="wire-tape" id="wire-tape" aria-live="polite">
+        <p class="wire-msg sys">[LINE TO THE MOORLANDS OPEN — RELAY READY]</p>
+      </div>
+      <form class="wire-form" id="wire-form">
+        <label for="wire-input" class="sr-only">Message to Lady Eudoria</label>
+        <input type="text" id="wire-input" placeholder="Ask for a hint, or name a clue…" autocomplete="off">
+        <button type="submit" class="brass-btn">Transmit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Kodak flash -->
+  <div id="flash" aria-hidden="true"></div>
+
+  <script src="audio.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
